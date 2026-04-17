@@ -8,6 +8,7 @@ import { isValidTimezone } from './timezone.js';
 const envConfig = readEnvFile([
   'ASSISTANT_NAME',
   'ASSISTANT_HAS_OWN_NUMBER',
+  'CREDENTIAL_PROXY_PORT',
   'ONECLI_URL',
   'TZ',
 ]);
@@ -52,7 +53,9 @@ export const CONTAINER_MAX_OUTPUT_SIZE = parseInt(
   10,
 ); // 10MB default
 export const CREDENTIAL_PROXY_PORT = parseInt(
-  process.env.CREDENTIAL_PROXY_PORT || '3001',
+  process.env.CREDENTIAL_PROXY_PORT ||
+    envConfig.CREDENTIAL_PROXY_PORT ||
+    '3001',
   10,
 );
 export const ONECLI_URL =

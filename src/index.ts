@@ -5,6 +5,7 @@ import { OneCLI } from '@onecli-sh/sdk';
 
 import {
   ASSISTANT_NAME,
+  CREDENTIAL_PROXY_PORT,
   DEFAULT_TRIGGER,
   getTriggerPattern,
   GROUPS_DIR,
@@ -28,7 +29,9 @@ import {
 import {
   cleanupOrphans,
   ensureContainerRuntimeRunning,
+  PROXY_BIND_HOST,
 } from './container-runtime.js';
+import { startCredentialProxy } from './credential-proxy.js';
 import {
   getAllChats,
   getAllRegisteredGroups,
@@ -570,6 +573,7 @@ function ensureContainerSystemRunning(): void {
 
 async function main(): Promise<void> {
   ensureContainerSystemRunning();
+  await startCredentialProxy(CREDENTIAL_PROXY_PORT, PROXY_BIND_HOST);
   initDatabase();
   logger.info('Database initialized');
   loadState();
