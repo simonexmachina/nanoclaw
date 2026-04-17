@@ -1,0 +1,14 @@
+{
+  "name": "workspace-server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Lightweight file server for OpenClaw workspace",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "marked": "^12.0.0",
+    "mime-types": "^2.1.35"
+  }
+}
