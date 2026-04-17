@@ -12,7 +12,6 @@ import {
   POLL_INTERVAL,
   TIMEZONE,
 } from './config.js';
-import { startCredentialProxy } from './credential-proxy.js';
 import './channels/index.js';
 import {
   getChannelFactory,
@@ -623,7 +622,6 @@ function ensureContainerSystemRunning(): void {
 
 async function main(): Promise<void> {
   ensureContainerSystemRunning();
-  await startCredentialProxy(CREDENTIAL_PROXY_PORT, PROXY_BIND_HOST);
   initDatabase();
   logger.info('Database initialized');
   loadState();
