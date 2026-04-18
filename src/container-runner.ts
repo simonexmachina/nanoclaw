@@ -48,6 +48,7 @@ export interface ContainerInput {
   isScheduledTask?: boolean;
   assistantName?: string;
   script?: string;
+  model?: string;
 }
 
 export interface ContainerOutput {
@@ -243,6 +244,7 @@ function buildContainerArgs(
   mounts: VolumeMount[],
   containerName: string,
   isMain: boolean,
+  model?: string,
 ): string[] {
   const args: string[] = ['run', '-i', '--rm', '--name', containerName];
 
@@ -252,6 +254,11 @@ function buildContainerArgs(
   // Forward Ollama admin tools flag if enabled
   if (OLLAMA_ADMIN_TOOLS) {
     args.push('-e', 'OLLAMA_ADMIN_TOOLS=true');
+  }
+
+  // Per-invocation model override (e.g. Haiku for lightweight scheduled tasks)
+  if (model) {
+    args.push('-e', `ANTHROPIC_MODEL=${model}`);
   }
 
   // Route API traffic through the credential proxy (containers never see real secrets)
@@ -318,7 +325,7 @@ export async function runContainerAgent(
   const mounts = buildVolumeMounts(group, input.isMain);
   const safeName = group.folder.replace(/[^a-zA-Z0-9-]/g, '-');
   const containerName = `nanoclaw-${safeName}-${Date.now()}`;
-  const containerArgs = buildContainerArgs(mounts, containerName, input.isMain);
+  const containerArgs = buildContainerArgs(mounts, containerName, input.isMain, input.model);
 
   logger.debug(
     {
